@@ -33,6 +33,7 @@ void setup() {
   servoL.attach(9);
   servoP.attach(22);
   Serial.begin(9600);
+  //servoL.write(85);
 }
 
 void loop() {
@@ -87,16 +88,21 @@ void loop() {
   servValL -= joyValY;
   servValR += joyValY;
   //Make sure it doensn't exceed the boundaries
-  if(servValL > 100){
-    servValL = 100;
+  
+  /*if(servValL > 104){
+    servValL = 104;
   } else if(servValL < 86){
     servValL = 86;
   }
-  if(servValR > 100){
-    servValR = 100;
-  } else if(servValR < 86){
-    servValR = 86;
-  }
+  
+  if(servValR > 109){
+    servValR = 109;
+  } else if(servValR < 76){
+    servValR = 76;
+  }*/
+  
+  Serial.println(servValR);
+  Serial.println(servValL);
   //Write it to the servos
   servoL.write((int)servValL);
   servoR.write((int)servValR);
