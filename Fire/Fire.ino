@@ -1,9 +1,22 @@
 #include <AFMotor.h>
 #include <Servo.h>
+#include <SR04.h>
 
+//Pins for the ultrasonic sensor
+#define TRIG_PIN 25
+#define ECHO_PIN 26
+
+//Define the ultrasonic sensor and the variable for the distance
+SR04 ultrasonic = SR04(ECHO_PIN,TRIG_PIN);
+long distance;
+
+//The various servos
 Servo servoR;
 Servo servoL;
 Servo servoP;
+
+Servo bottom;
+Servo top;
 
 //Joystick Pins
 const int joyX = 1;
@@ -32,18 +45,36 @@ void setup() {
   servoR.attach(10);
   servoL.attach(9);
   servoP.attach(22);
+  bottom.attach(27);
+  top.attach(28);
   Serial.begin(9600);
   //servoL.write(104);
   //servoR.write(76);
+  servoL.write(104);
+  servoR.write(76);
 }
 
 void loop() {
+  //Get the distance
+  distance = ultrasonic.Distance();
+  if(distance >= 10 && distance <= 400) {
+    if(distance <= 40){
+      fire();
+    }
+  }
+  delay(3000);
+  
+}
+
+void fire(){
   //Down positions
   servoL.write(104);
   servoR.write(76);
-  delay(3000);
+  delay(250);
   //Firing positions
-  servoL.write(30);
-  servoR.write(150);
-  delay(3000);
+  servoL.write(5);
+  servoR.write(175);
+  delay(250);
+  servoL.write(104);
+  servoR.write(76);
 }
