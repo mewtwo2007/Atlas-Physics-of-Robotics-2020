@@ -81,14 +81,16 @@ void loop() {
   //Read joystick
   float joyValX = analogRead (joyX);
   float joyValY = analogRead(joyY);
-  //Is the joystick active?
-  if(joyValX > -3 && joyValX < 3 && joyValY > -3 && joyValY < 3){
-    //Get the distance
-    distance = ultrasonic.Distance();
-    //If it's within the threshold, fire
-    if(distance >= 10 && distance <= 400) {
-      if(distance <= 40){
-        fire();
+  //Is the joystick active? If it is, aim. If it isn't, do the check for firing
+  if(joyValX > 505 && joyValX < 515 && joyValY > 405 && joyValY < 505){
+    if(active == 1){
+      //Get the distance
+      distance = ultrasonic.Distance();
+      //If it's within the threshold, fire
+      if(distance >= 10 && distance <= 400) {
+        if(distance <= 30){
+          fire();
+        }
       }
     }
   } else {
@@ -127,7 +129,6 @@ void loop() {
     } else if(servValR < 71){
       servValR = 71;
     }
-  
     //Write it to the servos
     servoL.write((int)servValL);
     servoR.write((int)servValR);
@@ -135,17 +136,17 @@ void loop() {
 }
 
 void fire(){
-  //Down positions
-  servoL.write(108);
-  servoR.write(71);
+  //Starting position
+  servoL.write(servValL);
+  servoR.write(servValR);
   delay(250);
   //Firing positions
   servoL.write(5);
   servoR.write(175);
-  delay(250);
+  delay(500);
   //Back to the starting position
-  servoL.write(108);
-  servoR.write(71);
+  servoL.write(servValL);
+  servoR.write(servValR);
   delay(500);
   //Reload
   reload();
@@ -154,8 +155,8 @@ void fire(){
 
 void reload() {
   //Move the bottom out, then back in
-  bottom.write(60);
-  delay(80);
+  bottom.write(50);
+  delay(90);
   bottom.write(100);
   delay(250);
   //Move the top out, then back in

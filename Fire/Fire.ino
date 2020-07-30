@@ -47,11 +47,15 @@ void setup() {
   servoP.attach(22);
   bottom.attach(27);
   top.attach(28);
+  
   Serial.begin(9600);
-  //servoL.write(104);
-  //servoR.write(76);
-  servoL.write(104);
-  servoR.write(76);
+  servoL.write(108);
+  servoR.write(71);
+
+  top.write(0);
+  bottom.write(100);
+  delay(250);
+  top.write(75);
 }
 
 void loop() {
@@ -62,19 +66,34 @@ void loop() {
       fire();
     }
   }
-  delay(3000);
-  
 }
 
 void fire(){
   //Down positions
-  servoL.write(104);
-  servoR.write(76);
+  servoL.write(108);
+  servoR.write(71);
   delay(250);
   //Firing positions
   servoL.write(5);
   servoR.write(175);
   delay(250);
-  servoL.write(104);
-  servoR.write(76);
+  //Back to the starting position
+  servoL.write(108);
+  servoR.write(71);
+  delay(500);
+  //Reload
+  reload();
+  delay(500);
+}
+
+void reload() {
+  //Move the bottom out, then back in
+  bottom.write(60);
+  delay(80);
+  bottom.write(100);
+  delay(250);
+  //Move the top out, then back in
+  top.write(0);
+  delay(250);
+  top.write(75);
 }
